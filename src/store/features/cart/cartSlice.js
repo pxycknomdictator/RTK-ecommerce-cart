@@ -19,11 +19,11 @@ export const cartSlice = createSlice({
         localStorage.setItem(_storage, JSON.stringify(state.products));
       }
     },
+
     incrementQuantity: (state, action) => {
       const isExists = state.products.findIndex(
         (product) => product.id === action.payload.id
       );
-
       if (isExists !== -1) {
         const product = state.products[isExists];
         const unitPrice = product.price / product.quantity;
@@ -32,6 +32,7 @@ export const cartSlice = createSlice({
         localStorage.setItem(_storage, JSON.stringify(state.products));
       }
     },
+
     decrementQuantity: (state, action) => {
       const isExists = state.products.findIndex(
         (product) => product.id === action.payload.id
@@ -39,18 +40,27 @@ export const cartSlice = createSlice({
       if (isExists !== -1) {
         const product = state.products[isExists];
         const unitPrice = product.price / product.quantity;
-        if (product.quantity <= 1) {
-          product.quantity = 1;
-        } else {
-          product.quantity -= 1;
-        }
+        product.quantity <= 1
+          ? (product.quantity = 1)
+          : (product.quantity -= 1);
         product.price = product.quantity * unitPrice;
         localStorage.setItem(_storage, JSON.stringify(state.products));
       }
     },
+
+    removeProduct: (state, action) => {
+      state.products = state.products.filter(
+        (product) => product.id !== action.payload.id
+      );
+      localStorage.setItem(_storage, JSON.stringify(state.products));
+    },
   },
 });
 
-export const { addToCart, incrementQuantity, decrementQuantity } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  incrementQuantity,
+  decrementQuantity,
+  removeProduct,
+} = cartSlice.actions;
 export default cartSlice.reducer;
