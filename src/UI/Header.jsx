@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 export const Header = () => {
+  const { products } = useSelector((state) => state.cart);
   return (
     <header className="container mx-auto px-5 py-3 sm:px-0 flex items-center justify-between">
       <div>
@@ -9,7 +11,7 @@ export const Header = () => {
       <nav className="space-x-6 text-[1.2rem] font-semibold">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">Cart</NavLink>
-        <span>Items: 0</span>
+        <span>Items: {products.length}</span>
       </nav>
     </header>
   );
