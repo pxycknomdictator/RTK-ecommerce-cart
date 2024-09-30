@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const _storage = "products";
+
 const initialState = {
-  products: [],
+  products: JSON.parse(localStorage.getItem(_storage)) || [],
 };
 
 export const cartSlice = createSlice({
@@ -9,10 +11,46 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      state.products.push(action.payload);
+      const isExists = state.products.find(
+        (product) => product.id === action.payload.id
+      );
+      if (!isExists) {
+        state.products.push(action.payload);
+        localStorage.setItem(_storage, JSON.stringify(state.products));
+      }
+    },
+    incrementQuantity: (state, action) => {
+      const isExists = state.products.findIndex(
+        (product) => product.id === action.payload.id
+      );
+
+      if (isExists !== -1) {
+        const product = state.products[isExists];
+        const unitPrice = product.price / product.quantity;
+        product.quantity += 1;
+        product.price = product.quantity * unitPrice;
+        localStorage.setItem(_storage, JSON.stringify(state.products));
+      }
+    },
+    decrementQuantity: (state, action) => {
+      const isExists = state.products.findIndex(
+        (product) => product.id === action.payload.id
+      );
+      if (isExists !== -1) {
+        const product = state.products[isExists];
+        const unitPrice = product.price / product.quantity;
+        if (product.quantity <= 1) {
+          product.quantity = 1;
+        } else {
+          product.quantity -= 1;
+        }
+        product.price = product.quantity * unitPrice;
+        localStorage.setItem(_storage, JSON.stringify(state.products));
+      }
     },
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, incrementQuantity, decrementQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;
