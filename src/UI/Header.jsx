@@ -1,6 +1,6 @@
 export const Header = () => {
   return (
-    <header className="max-w-7xl mx-auto flex items-center justify-between">
+    <header className="container mx-auto px-5 sm:px-0 flex items-center justify-between">
       <div>
         <h1 className="text-3xl font-semibold">Redux Toolkit</h1>
       </div>
