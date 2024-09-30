@@ -1,3 +1,5 @@
+import { CartList } from "../components/CartList";
+
 export const Products = () => {
-  return <div>Products</div>;
+  return <CartList />;
 };
